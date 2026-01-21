@@ -7,7 +7,7 @@ A real-time WebSocket-based chat application that uses OpenAI to generate respon
 ### Prerequisites
 
 - Node.js 18+ and npm
-- OpenAI API key (optional - test key included)
+- OpenAI API key (required - you must provide your own)
 
 ### Installation
 
