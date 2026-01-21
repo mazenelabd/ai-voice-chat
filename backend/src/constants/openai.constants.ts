@@ -1,0 +1,11 @@
+export const OPENAI_CONFIG = {
+  CHAT_MODEL: 'gpt-4o-mini',
+  TTS_MODEL: 'tts-1',
+  TTS_VOICE: 'alloy',
+  MAX_TOKENS: 1500,
+  TTS_MAX_CHARS: 4096,
+  MAX_SENTENCE_LENGTH: 4000,
+  MIN_SENTENCE_LENGTH: 50,
+  MAX_CONTINUATION_COUNT: 2,
+} as const;
+
