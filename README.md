@@ -66,13 +66,19 @@ text-audio-chat-app/
 ├── backend/           # WebSocket server
 │   ├── src/
 │   │   ├── services/  # WebSocket & OpenAI services
-│   │   ├── utils/     # Text processing utilities
-│   │   └── types/     # TypeScript definitions
+│   │   ├── utils/     # Text processing, stream processing, error handling
+│   │   ├── constants/ # Configuration constants
+│   │   ├── types/     # TypeScript definitions
+│   │   └── index.ts   # Server entry point
 │   └── README.md
 ├── frontend/          # Next.js application
 │   ├── app/           # App router
-│   ├── components/    # React components
-│   ├── hooks/         # Custom React hooks
+│   │   ├── components/    # React components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── types/         # TypeScript definitions
+│   │   ├── utils/         # Utility functions
+│   │   └── ...            # Pages and layouts
+│   ├── components/    # shadcn/ui components
 │   ├── cypress/       # E2E tests
 │   └── README.md
 └── README.md

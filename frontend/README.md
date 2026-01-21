@@ -85,3 +85,21 @@ npm run cypress:run
 - **React Markdown**
 - **Cypress**
 - **Jest**
+
+## Project Structure
+
+```
+frontend/
+├── app/               # Next.js App Router
+│   ├── components/    # React components (ChatInterface, MessageBubble, etc.)
+│   ├── hooks/         # Custom React hooks (useWebSocket, useAudioQueue, etc.)
+│   ├── types/         # TypeScript type definitions
+│   ├── utils/         # Utility functions (text processing, etc.)
+│   ├── layout.tsx     # Root layout
+│   └── page.tsx       # Home page
+├── components/        # shadcn/ui component library
+├── lib/              # Shared utilities
+├── public/           # Static assets
+├── cypress/          # E2E tests
+└── README.md
+```

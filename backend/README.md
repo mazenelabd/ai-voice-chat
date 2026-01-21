@@ -60,9 +60,21 @@ npm run test:watch
 
 ## Architecture
 
+### Services
 - **WebSocket Service** (`src/services/websocket.service.ts`) - Handles WebSocket connections and message routing
 - **OpenAI Service** (`src/services/openai.service.ts`) - Interfaces with OpenAI APIs (Chat Completions and TTS)
+
+### Utilities
 - **Text Processing** (`src/utils/textProcessing.ts`) - Utilities for text splitting and processing
+- **Stream Processor** (`src/utils/stream-processor.ts`) - Processes streaming chat completions and extracts sentences
+- **Response Builder** (`src/utils/response-builder.ts`) - Builds WebSocket response messages
+- **Error Handler** (`src/utils/error-handler.ts`) - Error detection and handling utilities
+
+### Constants
+- **OpenAI Constants** (`src/constants/openai.constants.ts`) - OpenAI configuration (models, limits, tokens)
+- **WebSocket Constants** (`src/constants/websocket.constants.ts`) - WebSocket configuration
+- **System Constants** (`src/constants/system.constants.ts`) - System message content
+- **Error Constants** (`src/constants/errors.constants.ts`) - Centralized error messages
 
 ## Features
 
@@ -71,4 +83,6 @@ npm run test:watch
 - Text-to-speech conversion
 - Streaming audio chunks to clients
 - Request cancellation support
+- Modular architecture with extracted constants and utilities
+- Comprehensive error handling
 
