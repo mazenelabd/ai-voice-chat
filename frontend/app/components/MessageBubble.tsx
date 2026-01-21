@@ -29,11 +29,44 @@ export function MessageBubble({
       return message.text;
     }
 
+    // The highlightedSentence from message.sentences should match exactly what's in message.text
+    // including any markdown syntax. Try to find it directly first.
     const sentenceText = highlightedSentence.trim();
-    const normalizedSentence = sentenceText.toLowerCase();
-    const normalizedText = message.text.toLowerCase();
+    let index = message.text.indexOf(sentenceText);
     
-    const index = normalizedText.indexOf(normalizedSentence);
+    // If exact match not found, try case-insensitive
+    if (index === -1) {
+      const lowerText = message.text.toLowerCase();
+      const lowerSentence = sentenceText.toLowerCase();
+      index = lowerText.indexOf(lowerSentence);
+    }
+    
+    // If still not found, the sentence might have different markdown formatting
+    // Try to find it by matching the text content (ignoring markdown)
+    if (index === -1) {
+      // Create a regex that matches the sentence text, allowing markdown around it
+      // Escape special regex characters
+      const escaped = sentenceText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // Replace markdown patterns with optional patterns
+      const pattern = escaped
+        .replace(/\*\*/g, '\\*\\*?')
+        .replace(/__/g, '__?')
+        .replace(/\*/g, '\\*?')
+        .replace(/_/g, '_?')
+        .replace(/`/g, '`?')
+        .replace(/#+/g, '#*');
+      
+      const regex = new RegExp(pattern, 'i');
+      const match = message.text.match(regex);
+      if (match && match.index !== undefined) {
+        index = match.index;
+        // Use the matched text length instead of sentenceText.length
+        const before = message.text.substring(0, index);
+        const matched = match[0];
+        const after = message.text.substring(index + matched.length);
+        return `${before}<mark>${matched}</mark>${after}`;
+      }
+    }
     
     if (index === -1) {
       return message.text;
