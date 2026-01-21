@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent } from 'react';
+import { FormEvent, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Send, Square } from 'lucide-react';
@@ -25,8 +25,10 @@ export function ChatInput({
   isAudioPlaying,
 }: ChatInputProps) {
   const canStop = isLoading || isAudioPlaying;
+  const formRef = useRef<HTMLFormElement>(null);
+
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form ref={formRef} onSubmit={onSubmit} className="space-y-3">
       <Textarea
         value={inputText}
         onChange={(e) => onInputChange(e.target.value)}
@@ -35,7 +37,8 @@ export function ChatInput({
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (inputText.trim() && isConnected && !isLoading) {
-              onSubmit(e as React.FormEvent<HTMLFormElement>);
+              // Programmatically submit the form to trigger onSubmit with proper event type
+              formRef.current?.requestSubmit();
             }
           }
         }}
