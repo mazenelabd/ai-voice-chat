@@ -35,7 +35,7 @@ export function ChatInput({
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             if (inputText.trim() && isConnected && !isLoading) {
-              onSubmit(e as any);
+              onSubmit(e as React.FormEvent<HTMLFormElement>);
             }
           }
         }}
@@ -60,7 +60,7 @@ export function ChatInput({
             </>
           )}
         </Button>
-          
+
         <Button
           type="button"
           onClick={onStop}
@@ -76,4 +76,3 @@ export function ChatInput({
     </form>
   );
 }
-

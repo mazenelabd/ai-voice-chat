@@ -15,7 +15,9 @@ export function useAudioQueue(
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioQueueRef = useRef<AudioChunk[]>([]);
   const isPlayingQueueRef = useRef(false);
-  const [currentPlayingParagraph, setCurrentPlayingParagraph] = useState<string | null>(null);
+  const [currentPlayingParagraph, setCurrentPlayingParagraph] = useState<
+    string | null
+  >(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const updatePlayingParagraph = useCallback(
@@ -101,7 +103,9 @@ export function useAudioQueue(
       // Find the correct position to insert
       let insertIndex = audioQueueRef.current.length;
       for (let i = 0; i < audioQueueRef.current.length; i++) {
-        if ((audioQueueRef.current[i].chunkIndex ?? 0) > (chunk.chunkIndex ?? 0)) {
+        if (
+          (audioQueueRef.current[i].chunkIndex ?? 0) > (chunk.chunkIndex ?? 0)
+        ) {
           insertIndex = i;
           break;
         }
@@ -146,4 +150,3 @@ export function useAudioQueue(
     stopAudio,
   };
 }
-

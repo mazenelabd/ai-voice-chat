@@ -5,11 +5,13 @@ Next.js frontend application for the Talk chat interface. Provides a modern, res
 ## Installation
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Set up environment variables:
+
 ```bash
 # Copy the example file
 cp .env.example .env.local
@@ -21,6 +23,7 @@ NEXT_PUBLIC_WS_URL=ws://localhost:8000
 ## Starting the Application
 
 ### Development Mode
+
 ```bash
 npm run dev
 ```
@@ -28,6 +31,7 @@ npm run dev
 The application will be available at `http://localhost:3000`.
 
 ### Production Mode
+
 ```bash
 npm run build
 npm start
@@ -36,16 +40,19 @@ npm start
 ## Testing
 
 ### Unit Tests
+
 ```bash
 npm test
 ```
 
 Run tests in watch mode:
+
 ```bash
 npm run test:watch
 ```
 
 ### E2E Tests
+
 ```bash
 # Interactive mode
 npm run cypress:open

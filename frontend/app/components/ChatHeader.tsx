@@ -30,4 +30,3 @@ export function ChatHeader({ isLoading, onNewChat }: ChatHeaderProps) {
     </CardHeader>
   );
 }
-

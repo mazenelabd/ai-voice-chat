@@ -46,4 +46,3 @@ describe('ChatHeader', () => {
     expect(newChatButton.querySelector('svg')).toBeInTheDocument();
   });
 });
-

@@ -28,7 +28,12 @@ export default function ChatInterface() {
     ensureAIMessageDisplayed,
   } = useChatMessages();
 
-  const { currentPlayingParagraph, isPlaying: isAudioPlaying, addChunk, stopAudio } = useAudioQueue();
+  const {
+    currentPlayingParagraph,
+    isPlaying: isAudioPlaying,
+    addChunk,
+    stopAudio,
+  } = useAudioQueue();
 
   const handleWebSocketMessage = useCallback(
     (message: WebSocketMessage) => {
@@ -52,20 +57,27 @@ export default function ChatInterface() {
     [addChunk, ensureAIMessageDisplayed]
   );
 
-  const { sendMessage, sendStop, isConnected, error, lastMessage, reconnect } = useWebSocket(
-    WS_URL,
-    handleWebSocketMessage
-  );
+  const { sendMessage, sendStop, isConnected, error, lastMessage, reconnect } =
+    useWebSocket(WS_URL, handleWebSocketMessage);
 
   useEffect(() => {
     if (lastMessage) {
       if (lastMessage.type === 'error') {
-        setIsLoading(false);
-        addErrorMessage(lastMessage.error || 'Unknown error');
+        // Use setTimeout to defer state updates and avoid cascading renders
+        setTimeout(() => {
+          setIsLoading(false);
+          addErrorMessage(lastMessage.error || 'Unknown error');
+        }, 0);
       } else if (lastMessage.type === 'text' && lastMessage.data) {
         updateAIMessage(lastMessage.data);
-      } else if (lastMessage.type === 'audio-chunk' && lastMessage.chunkIndex === 0 && lastMessage.audio) {
-        setIsLoading(false);
+      } else if (
+        lastMessage.type === 'audio-chunk' &&
+        lastMessage.chunkIndex === 0 &&
+        lastMessage.audio
+      ) {
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 0);
       }
     }
   }, [lastMessage, updateAIMessage, addErrorMessage]);
@@ -98,10 +110,7 @@ export default function ChatInterface() {
   return (
     <div className="flex h-screen items-center justify-center bg-white p-2 sm:p-4 md:p-6 dark:bg-slate-950 overflow-hidden">
       <Card className="w-full max-w-2xl lg:max-w-4xl xl:max-w-5xl h-full max-h-screen shadow-lg border-slate-200 dark:border-slate-800 flex flex-col">
-        <ChatHeader
-          isLoading={isLoading}
-          onNewChat={handleNewChat}
-        />
+        <ChatHeader isLoading={isLoading} onNewChat={handleNewChat} />
         <CardContent className="flex flex-col flex-1 min-h-0 space-y-3 sm:space-y-4 p-3 sm:p-6">
           {error && <ErrorDisplay error={error} />}
 

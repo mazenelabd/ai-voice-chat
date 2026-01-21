@@ -5,7 +5,10 @@ import { WEBSOCKET_CONFIG } from '../constants/websocket.constants';
  * Utility functions for building WebSocket response messages
  */
 export class ResponseBuilder {
-  static createTextResponse(fullText: string, paragraph: string): WebSocketMessage {
+  static createTextResponse(
+    fullText: string,
+    paragraph: string
+  ): WebSocketMessage {
     return {
       type: 'text',
       data: fullText,
@@ -28,7 +31,10 @@ export class ResponseBuilder {
     };
   }
 
-  static createFinalAudioChunkResponse(chunkIndex: number, totalChunks: number): WebSocketMessage {
+  static createFinalAudioChunkResponse(
+    chunkIndex: number,
+    totalChunks: number
+  ): WebSocketMessage {
     return {
       type: 'audio-chunk',
       chunkIndex,
@@ -51,4 +57,3 @@ export class ResponseBuilder {
     };
   }
 }
-

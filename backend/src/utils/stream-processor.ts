@@ -40,7 +40,9 @@ export class StreamProcessor {
           if (extractedSentence.length > 0) {
             await this.onSentence(extractedSentence, this.fullContent);
             this.lastProcessedLength = this.fullContent.length;
-            this.currentSentence = this.currentSentence.slice(fallbackMatch[0].length).trim();
+            this.currentSentence = this.currentSentence
+              .slice(fallbackMatch[0].length)
+              .trim();
           }
         } else {
           const sentence = this.currentSentence.trim();
@@ -75,18 +77,20 @@ export class StreamProcessor {
         await this.onSentence(trimmedSentence, this.fullContent);
         this.lastProcessedLength = this.fullContent.length;
         this.currentSentence = '';
-      } catch (error) {
-        console.error('Error processing remaining sentence:', error);
+      } catch (err) {
+        console.error('Error processing remaining sentence:', err);
       }
     }
 
     if (this.fullContent.length > this.lastProcessedLength) {
-      const unprocessedText = this.fullContent.slice(this.lastProcessedLength).trim();
+      const unprocessedText = this.fullContent
+        .slice(this.lastProcessedLength)
+        .trim();
       if (unprocessedText.length > 0 && this.onSentence) {
         try {
           await this.onSentence(unprocessedText, this.fullContent);
-        } catch (error) {
-          console.error('Error sending unprocessed text:', error);
+        } catch (err) {
+          console.error('Error sending unprocessed text:', err);
         }
       }
     }
@@ -96,4 +100,3 @@ export class StreamProcessor {
     return this.fullContent;
   }
 }
-

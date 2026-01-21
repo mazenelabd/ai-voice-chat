@@ -1,9 +1,8 @@
 import { WebSocket, WebSocketServer } from 'ws';
 import { OpenAIService, ChatMessage } from './openai.service';
-import { WebSocketMessage, ClientMessage } from '../types';
+import { ClientMessage } from '../types';
 import { SYSTEM_MESSAGE } from '../constants/system.constants';
 import { WEBSOCKET_CONFIG } from '../constants/websocket.constants';
-import { OPENAI_CONFIG } from '../constants/openai.constants';
 import { ERROR_MESSAGES } from '../constants/errors.constants';
 import { ResponseBuilder } from '../utils/response-builder';
 import { ErrorHandler } from '../utils/error-handler';
@@ -36,13 +35,13 @@ export class WebSocketService {
         try {
           const message: ClientMessage = JSON.parse(data.toString());
           await this.handleMessage(ws, message);
-        } catch (error) {
+        } catch {
           this.sendError(ws, ERROR_MESSAGES.INVALID_MESSAGE_FORMAT);
         }
       });
 
-      ws.on('error', (error: Error) => {
-        console.error('WebSocket error:', error);
+      ws.on('error', (err: Error) => {
+        console.error('WebSocket error:', err);
       });
 
       ws.on('close', () => {
@@ -65,7 +64,7 @@ export class WebSocketService {
         console.log('Stop requested by client');
         abortController.abort();
         this.abortControllers.delete(ws);
-        
+
         const stopResponse = ResponseBuilder.createStopResponse();
         ws.send(JSON.stringify(stopResponse));
       }
@@ -112,22 +111,32 @@ export class WebSocketService {
                 return;
               }
 
-              const audioBuffer = await this.openaiService.textToSpeechChunk(chunkText);
-              
+              const audioBuffer =
+                await this.openaiService.textToSpeechChunk(chunkText);
+
               if (abortController.signal.aborted) {
                 return;
               }
 
               const audioBase64 = audioBuffer.toString('base64');
 
-              if (abortController.signal.aborted || ws.readyState !== WebSocket.OPEN) {
+              if (
+                abortController.signal.aborted ||
+                ws.readyState !== WebSocket.OPEN
+              ) {
                 return;
               }
 
-              const textResponse = ResponseBuilder.createTextResponse(fullText, chunkText);
+              const textResponse = ResponseBuilder.createTextResponse(
+                fullText,
+                chunkText
+              );
               ws.send(JSON.stringify(textResponse));
 
-              if (abortController.signal.aborted || ws.readyState !== WebSocket.OPEN) {
+              if (
+                abortController.signal.aborted ||
+                ws.readyState !== WebSocket.OPEN
+              ) {
                 return;
               }
 
@@ -153,7 +162,11 @@ export class WebSocketService {
         return;
       }
 
-      if (chunkIndex > 0 && !abortController.signal.aborted && ws.readyState === WebSocket.OPEN) {
+      if (
+        chunkIndex > 0 &&
+        !abortController.signal.aborted &&
+        ws.readyState === WebSocket.OPEN
+      ) {
         const finalResponse = ResponseBuilder.createFinalAudioChunkResponse(
           chunkIndex - 1,
           chunkIndex
@@ -172,19 +185,24 @@ export class WebSocketService {
       }
 
       const systemMessage = history[0];
-      const recentMessages = history.slice(1).slice(-WEBSOCKET_CONFIG.HISTORY_LIMIT);
+      const recentMessages = history
+        .slice(1)
+        .slice(-WEBSOCKET_CONFIG.HISTORY_LIMIT);
       const limitedHistory = systemMessage
         ? [systemMessage, ...recentMessages]
         : recentMessages;
       this.conversationHistory.set(ws, limitedHistory);
     } catch (error) {
       this.abortControllers.delete(ws);
-      
+
       if (ErrorHandler.isAbortError(error)) {
         return;
       }
-      
-      const errorMessage = ErrorHandler.getErrorMessage(error, ERROR_MESSAGES.UNKNOWN_ERROR);
+
+      const errorMessage = ErrorHandler.getErrorMessage(
+        error,
+        ERROR_MESSAGES.UNKNOWN_ERROR
+      );
       console.error('Error processing message:', errorMessage);
       this.sendError(ws, errorMessage);
     }
@@ -199,4 +217,3 @@ export class WebSocketService {
     this.wss.close();
   }
 }
-

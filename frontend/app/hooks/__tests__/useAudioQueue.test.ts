@@ -181,4 +181,3 @@ describe('useAudioQueue', () => {
     expect(onParagraphChange).toHaveBeenCalledWith('Test paragraph');
   });
 });
-

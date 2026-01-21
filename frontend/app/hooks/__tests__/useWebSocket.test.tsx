@@ -24,7 +24,7 @@ class MockWebSocket {
     }, 10);
   }
 
-  send(data: string) {
+  send(_data: string) {
     // Simulate receiving a response
     setTimeout(() => {
       if (this.onmessage) {
@@ -53,7 +53,7 @@ describe('useWebSocket', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
-    
+
     mockWs = {
       readyState: MockWebSocket.CONNECTING,
       send: jest.fn(),
@@ -63,7 +63,7 @@ describe('useWebSocket', () => {
       onerror: null,
       onclose: null,
     };
-    
+
     const WebSocketMock = jest.fn((url: string) => {
       mockWs.url = url;
       setTimeout(() => {
@@ -74,13 +74,13 @@ describe('useWebSocket', () => {
       }, 10);
       return mockWs;
     }) as any;
-    
+
     // Set static properties on the mock
     WebSocketMock.CONNECTING = MockWebSocket.CONNECTING;
     WebSocketMock.OPEN = MockWebSocket.OPEN;
     WebSocketMock.CLOSING = MockWebSocket.CLOSING;
     WebSocketMock.CLOSED = MockWebSocket.CLOSED;
-    
+
     (global as any).WebSocket = WebSocketMock;
   });
 
@@ -95,7 +95,7 @@ describe('useWebSocket', () => {
     act(() => {
       jest.advanceTimersByTime(20);
     });
-    
+
     await waitFor(() => {
       expect(result.current.isConnected).toBe(true);
     });
@@ -117,7 +117,9 @@ describe('useWebSocket', () => {
       result.current.sendMessage('test message');
     });
 
-    expect(mockWs.send).toHaveBeenCalledWith(JSON.stringify({ text: 'test message' }));
+    expect(mockWs.send).toHaveBeenCalledWith(
+      JSON.stringify({ text: 'test message' })
+    );
   });
 
   it('should send stop action', async () => {
@@ -136,12 +138,16 @@ describe('useWebSocket', () => {
       result.current.sendStop();
     });
 
-    expect(mockWs.send).toHaveBeenCalledWith(JSON.stringify({ action: 'stop' }));
+    expect(mockWs.send).toHaveBeenCalledWith(
+      JSON.stringify({ action: 'stop' })
+    );
   });
 
   it('should handle message callback', async () => {
     const onMessageCallback = jest.fn();
-    const { result } = renderHook(() => useWebSocket('ws://localhost:8000', onMessageCallback));
+    const { result } = renderHook(() =>
+      useWebSocket('ws://localhost:8000', onMessageCallback)
+    );
 
     act(() => {
       jest.advanceTimersByTime(20);
@@ -154,9 +160,11 @@ describe('useWebSocket', () => {
     const testMessage = { type: 'text', data: 'Test message' };
     act(() => {
       if (mockWs.onmessage) {
-        mockWs.onmessage(new MessageEvent('message', {
-          data: JSON.stringify(testMessage),
-        }));
+        mockWs.onmessage(
+          new MessageEvent('message', {
+            data: JSON.stringify(testMessage),
+          })
+        );
       }
     });
 
@@ -179,11 +187,11 @@ describe('useWebSocket', () => {
     });
 
     expect(mockWs.close).toHaveBeenCalled();
-    
+
     act(() => {
       jest.advanceTimersByTime(150);
     });
-    
+
     // Should create a new connection
     expect((global as any).WebSocket).toHaveBeenCalledTimes(2);
   });
@@ -210,7 +218,9 @@ describe('useWebSocket', () => {
 
   it('should handle audio-chunk messages', async () => {
     const onMessageCallback = jest.fn();
-    const { result } = renderHook(() => useWebSocket('ws://localhost:8000', onMessageCallback));
+    const { result } = renderHook(() =>
+      useWebSocket('ws://localhost:8000', onMessageCallback)
+    );
 
     act(() => {
       jest.advanceTimersByTime(20);
@@ -229,13 +239,14 @@ describe('useWebSocket', () => {
 
     act(() => {
       if (mockWs.onmessage) {
-        mockWs.onmessage(new MessageEvent('message', {
-          data: JSON.stringify(audioMessage),
-        }));
+        mockWs.onmessage(
+          new MessageEvent('message', {
+            data: JSON.stringify(audioMessage),
+          })
+        );
       }
     });
 
     expect(onMessageCallback).toHaveBeenCalledWith(audioMessage);
   });
 });
-

@@ -1,5 +1,4 @@
 import { WebSocketService } from './websocket.service';
-import { OpenAIService } from './openai.service';
 
 // Mock WebSocket server
 const mockWs = {
@@ -97,20 +96,22 @@ describe('WebSocketService', () => {
     connectionHandler(testWs);
 
     // Get message handler
-    const messageCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'message');
+    const messageCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'message'
+    );
     if (!messageCall) {
       throw new Error('Message handler not found');
     }
 
     const messageHandler = messageCall[1];
     const message = JSON.stringify({ text: 'Test message' });
-    
+
     // Start the async handler
     const handlerPromise = messageHandler(Buffer.from(message));
-    
+
     // Wait a bit for async operations
     await new Promise((resolve) => setTimeout(resolve, 50));
-    
+
     // Wait for the handler to complete
     await handlerPromise;
 
@@ -149,7 +150,9 @@ describe('WebSocketService', () => {
     connectionHandler(testWs);
 
     // Get message handler
-    const messageCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'message');
+    const messageCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'message'
+    );
     if (!messageCall) {
       throw new Error('Message handler not found');
     }
@@ -172,7 +175,9 @@ describe('WebSocketService', () => {
     // Should send stop response (empty text message)
     expect(testWs.send.mock.calls.length).toBeGreaterThan(0);
     // Verify it's a stop response
-    const stopResponse = JSON.parse(testWs.send.mock.calls[testWs.send.mock.calls.length - 1][0]);
+    const stopResponse = JSON.parse(
+      testWs.send.mock.calls[testWs.send.mock.calls.length - 1][0]
+    );
     expect(stopResponse.type).toBe('text');
     expect(stopResponse.data).toBe('');
   });
@@ -188,7 +193,10 @@ describe('WebSocketService', () => {
       async (messages: any, signal: any, onSentence: any) => {
         // Simulate generating TTS for each sentence
         await onSentence('First sentence.', 'First sentence.');
-        await onSentence('Second sentence.', 'First sentence. Second sentence.');
+        await onSentence(
+          'Second sentence.',
+          'First sentence. Second sentence.'
+        );
         return 'First sentence. Second sentence.';
       }
     );
@@ -200,16 +208,20 @@ describe('WebSocketService', () => {
 
     connectionHandler(testWs);
 
-    const messageCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'message');
+    const messageCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'message'
+    );
     if (!messageCall) {
       throw new Error('Message handler not found');
     }
 
     const messageHandler = messageCall[1];
-    
+
     // Start handler (don't await immediately to allow async operations)
-    const handlerPromise = messageHandler(Buffer.from(JSON.stringify({ text: 'Test' })));
-    
+    const handlerPromise = messageHandler(
+      Buffer.from(JSON.stringify({ text: 'Test' }))
+    );
+
     // Wait for async operations to complete
     await new Promise((resolve) => setTimeout(resolve, 200));
     await handlerPromise;
@@ -246,7 +258,9 @@ describe('WebSocketService', () => {
 
     connectionHandler(testWs);
 
-    const messageCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'message');
+    const messageCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'message'
+    );
     if (!messageCall) {
       throw new Error('Message handler not found');
     }
@@ -280,7 +294,9 @@ describe('WebSocketService', () => {
 
     connectionHandler(testWs);
 
-    const messageCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'message');
+    const messageCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'message'
+    );
     if (!messageCall) {
       throw new Error('Message handler not found');
     }
@@ -321,14 +337,18 @@ describe('WebSocketService', () => {
 
     connectionHandler(testWs);
 
-    const messageCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'message');
+    const messageCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'message'
+    );
     if (!messageCall) {
       throw new Error('Message handler not found');
     }
 
     const messageHandler = messageCall[1];
-    
-    const handlerPromise = messageHandler(Buffer.from(JSON.stringify({ text: 'Test' })));
+
+    const handlerPromise = messageHandler(
+      Buffer.from(JSON.stringify({ text: 'Test' }))
+    );
     await new Promise((resolve) => setTimeout(resolve, 200));
     await handlerPromise;
 
@@ -352,7 +372,9 @@ describe('WebSocketService', () => {
     connectionHandler(testWs);
 
     // Get close handler
-    const closeCall = testWs.on.mock.calls.find((call: any[]) => call[0] === 'close');
+    const closeCall = testWs.on.mock.calls.find(
+      (call: any[]) => call[0] === 'close'
+    );
     if (closeCall) {
       closeCall[1]();
     }
@@ -361,4 +383,3 @@ describe('WebSocketService', () => {
     expect(testWs.on).toHaveBeenCalled();
   });
 });
-

@@ -26,4 +26,3 @@ process.on('SIGTERM', () => {
   wsService.close();
   process.exit(0);
 });
-

@@ -37,8 +37,14 @@ export function isSentenceHighlighted(
 ): boolean {
   if (!playingSentence) return false;
 
-  const normalizedSentence = sentence.trim().toLowerCase().replace(/[^\w\s]/g, '');
-  const normalizedPlaying = playingSentence.trim().toLowerCase().replace(/[^\w\s]/g, '');
+  const normalizedSentence = sentence
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '');
+  const normalizedPlaying = playingSentence
+    .trim()
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '');
 
   // Exact or near-exact match
   if (normalizedSentence === normalizedPlaying) {
@@ -51,12 +57,17 @@ export function isSentenceHighlighted(
   }
 
   // Check reverse (in case playing text is longer)
-  if (normalizedPlaying.includes(normalizedSentence) && normalizedSentence.length > 10) {
+  if (
+    normalizedPlaying.includes(normalizedSentence) &&
+    normalizedSentence.length > 10
+  ) {
     return true;
   }
 
   // Word-based matching for better accuracy
-  const playingWords = normalizedPlaying.split(/\s+/).filter((w) => w.length > 2);
+  const playingWords = normalizedPlaying
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
   if (playingWords.length >= 2) {
     const matchingWords = playingWords.filter((word) =>
       normalizedSentence.includes(word)
@@ -69,4 +80,3 @@ export function isSentenceHighlighted(
 
   return false;
 }
-

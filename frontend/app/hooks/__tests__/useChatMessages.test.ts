@@ -58,7 +58,9 @@ describe('useChatMessages', () => {
     const { result } = renderHook(() => useChatMessages());
 
     act(() => {
-      result.current.updateAIMessage('First sentence. Second sentence! Third sentence?');
+      result.current.updateAIMessage(
+        'First sentence. Second sentence! Third sentence?'
+      );
     });
 
     expect(result.current.messages[0].sentences).toHaveLength(3);
@@ -132,4 +134,3 @@ describe('useChatMessages', () => {
     expect(result.current.messages.length).toBeGreaterThan(0);
   });
 });
-

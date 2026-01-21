@@ -50,12 +50,18 @@ describe('textUtils', () => {
     });
 
     it('should return true when sentence contains playing text', () => {
-      const result = isSentenceHighlighted('This is a long sentence.', 'long sentence');
+      const result = isSentenceHighlighted(
+        'This is a long sentence.',
+        'long sentence'
+      );
       expect(result).toBe(true);
     });
 
     it('should return true when playing text contains sentence', () => {
-      const result = isSentenceHighlighted('Long sentence here.', 'This is a long sentence here with more text.');
+      const result = isSentenceHighlighted(
+        'Long sentence here.',
+        'This is a long sentence here with more text.'
+      );
       expect(result).toBe(true);
     });
 
@@ -68,7 +74,10 @@ describe('textUtils', () => {
     });
 
     it('should return false for no match', () => {
-      const result = isSentenceHighlighted('First sentence.', 'Second sentence.');
+      const result = isSentenceHighlighted(
+        'First sentence.',
+        'Second sentence.'
+      );
       expect(result).toBe(false);
     });
 
@@ -83,4 +92,3 @@ describe('textUtils', () => {
     });
   });
 });
-

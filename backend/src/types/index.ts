@@ -13,4 +13,3 @@ export interface ClientMessage {
   text?: string;
   action?: 'stop';
 }
-

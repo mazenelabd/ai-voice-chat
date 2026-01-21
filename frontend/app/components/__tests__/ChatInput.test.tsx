@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 /// <reference types="@testing-library/jest-dom" />
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ChatInput } from '../ChatInput';
 
@@ -22,7 +22,9 @@ describe('ChatInput', () => {
 
   it('should render input and send button', () => {
     render(<ChatInput {...defaultProps} />);
-    expect(screen.getByPlaceholderText('Type your message here...')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Type your message here...')
+    ).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /send/i })).toBeInTheDocument();
   });
 
@@ -46,7 +48,9 @@ describe('ChatInput', () => {
   it('should call onSubmit when form is submitted', async () => {
     const user = userEvent.setup();
     const onSubmit = jest.fn((e) => e.preventDefault());
-    render(<ChatInput {...defaultProps} inputText="Hello" onSubmit={onSubmit} />);
+    render(
+      <ChatInput {...defaultProps} inputText="Hello" onSubmit={onSubmit} />
+    );
 
     const submitButton = screen.getByRole('button', { name: /send/i });
     await user.click(submitButton);
@@ -57,7 +61,9 @@ describe('ChatInput', () => {
   it('should submit on Enter key', async () => {
     const user = userEvent.setup();
     const onSubmit = jest.fn((e) => e.preventDefault());
-    render(<ChatInput {...defaultProps} inputText="Hello" onSubmit={onSubmit} />);
+    render(
+      <ChatInput {...defaultProps} inputText="Hello" onSubmit={onSubmit} />
+    );
 
     const input = screen.getByPlaceholderText('Type your message here...');
     await user.type(input, '{Enter}');
@@ -68,7 +74,9 @@ describe('ChatInput', () => {
   it('should not submit on Shift+Enter', async () => {
     const user = userEvent.setup();
     const onSubmit = jest.fn();
-    render(<ChatInput {...defaultProps} inputText="Hello" onSubmit={onSubmit} />);
+    render(
+      <ChatInput {...defaultProps} inputText="Hello" onSubmit={onSubmit} />
+    );
 
     const input = screen.getByPlaceholderText('Type your message here...');
     await user.type(input, '{Shift>}{Enter}{/Shift}');
@@ -83,7 +91,9 @@ describe('ChatInput', () => {
   });
 
   it('should disable send button when not connected', () => {
-    render(<ChatInput {...defaultProps} inputText="Hello" isConnected={false} />);
+    render(
+      <ChatInput {...defaultProps} inputText="Hello" isConnected={false} />
+    );
     const sendButton = screen.getByRole('button', { name: /send/i });
     expect(sendButton).toBeDisabled();
   });
@@ -107,7 +117,9 @@ describe('ChatInput', () => {
   });
 
   it('should disable stop button when not loading or playing', () => {
-    render(<ChatInput {...defaultProps} isLoading={false} isAudioPlaying={false} />);
+    render(
+      <ChatInput {...defaultProps} isLoading={false} isAudioPlaying={false} />
+    );
     const stopButton = screen.getByRole('button', { name: /stop/i });
     expect(stopButton).toBeDisabled();
   });
@@ -129,4 +141,3 @@ describe('ChatInput', () => {
     expect(screen.getByText('Processing...')).toBeInTheDocument();
   });
 });
-

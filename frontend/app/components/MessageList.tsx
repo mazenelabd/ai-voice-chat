@@ -25,7 +25,9 @@ export function MessageList({
       ) : (
         messages.map((message, index) => {
           const isCurrentMessage = currentMessageIndex === index;
-          const activePlayingText = isCurrentMessage ? playingSentenceText : null;
+          const activePlayingText = isCurrentMessage
+            ? playingSentenceText
+            : null;
 
           return (
             <div
@@ -56,4 +58,3 @@ export function MessageList({
     </div>
   );
 }
-

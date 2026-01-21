@@ -3,4 +3,3 @@ export const WEBSOCKET_CONFIG = {
   HISTORY_LIMIT: 19,
   PLACEHOLDER_TOTAL_CHUNKS: -1,
 } as const;
-

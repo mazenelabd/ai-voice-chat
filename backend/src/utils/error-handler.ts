@@ -23,11 +23,13 @@ export class ErrorHandler {
     return false;
   }
 
-  static getErrorMessage(error: unknown, defaultMessage: string = 'Unknown error occurred'): string {
+  static getErrorMessage(
+    error: unknown,
+    defaultMessage: string = 'Unknown error occurred'
+  ): string {
     if (error instanceof Error) {
       return error.message;
     }
     return defaultMessage;
   }
 }
-

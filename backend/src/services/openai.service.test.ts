@@ -67,9 +67,9 @@ describe('OpenAIService', () => {
       });
 
       const messages = [{ role: 'user' as const, content: 'Test prompt' }];
-      await expect(
-        service.getChatCompletion(messages)
-      ).rejects.toThrow('No response content from OpenAI');
+      await expect(service.getChatCompletion(messages)).rejects.toThrow(
+        'No response content from OpenAI'
+      );
     });
   });
 
@@ -78,11 +78,19 @@ describe('OpenAIService', () => {
       const messages = [{ role: 'user' as const, content: 'Test prompt' }];
       const onSentence = jest.fn().mockResolvedValue(undefined);
 
-      const result = await service.streamChatCompletion(messages, undefined, onSentence);
+      const result = await service.streamChatCompletion(
+        messages,
+        undefined,
+        onSentence
+      );
 
       expect(result).toBe('First sentence. Second sentence.');
       expect(onSentence).toHaveBeenCalledTimes(2);
-      expect(onSentence).toHaveBeenNthCalledWith(1, 'First sentence.', 'First sentence. ');
+      expect(onSentence).toHaveBeenNthCalledWith(
+        1,
+        'First sentence.',
+        'First sentence. '
+      );
       expect(onSentence).toHaveBeenNthCalledWith(
         2,
         'Second sentence.',
@@ -123,7 +131,11 @@ describe('OpenAIService', () => {
       const messages = [{ role: 'user' as const, content: 'Test prompt' }];
       const onSentence = jest.fn().mockResolvedValue(undefined);
 
-      const result = await service.streamChatCompletion(messages, undefined, onSentence);
+      const result = await service.streamChatCompletion(
+        messages,
+        undefined,
+        onSentence
+      );
 
       expect(result).toBe('Incomplete sentence');
       // Should process remaining text even without punctuation
@@ -171,4 +183,3 @@ describe('OpenAIService', () => {
     });
   });
 });
-

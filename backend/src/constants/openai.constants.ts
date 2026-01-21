@@ -8,4 +8,3 @@ export const OPENAI_CONFIG = {
   MIN_SENTENCE_LENGTH: 50,
   MAX_CONTINUATION_COUNT: 2,
 } as const;
-

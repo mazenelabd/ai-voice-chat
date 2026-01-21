@@ -19,9 +19,11 @@ export function MessageBubble({
 }: MessageBubbleProps) {
   const highlightedSentence = useMemo(() => {
     if (!playingSentenceText || !message.sentences) return null;
-    return message.sentences.find((sentence) =>
-      isSentenceHighlighted(sentence, playingSentenceText)
-    ) || null;
+    return (
+      message.sentences.find((sentence) =>
+        isSentenceHighlighted(sentence, playingSentenceText)
+      ) || null
+    );
   }, [playingSentenceText, message.sentences]);
 
   const processedText = useMemo(() => {
@@ -33,14 +35,14 @@ export function MessageBubble({
     // including any markdown syntax. Try to find it directly first.
     const sentenceText = highlightedSentence.trim();
     let index = message.text.indexOf(sentenceText);
-    
+
     // If exact match not found, try case-insensitive
     if (index === -1) {
       const lowerText = message.text.toLowerCase();
       const lowerSentence = sentenceText.toLowerCase();
       index = lowerText.indexOf(lowerSentence);
     }
-    
+
     // If still not found, the sentence might have different markdown formatting
     // Try to find it by matching the text content (ignoring markdown)
     if (index === -1) {
@@ -55,7 +57,7 @@ export function MessageBubble({
         .replace(/_/g, '_?')
         .replace(/`/g, '`?')
         .replace(/#+/g, '#*');
-      
+
       const regex = new RegExp(pattern, 'i');
       const match = message.text.match(regex);
       if (match && match.index !== undefined) {
@@ -67,7 +69,7 @@ export function MessageBubble({
         return `${before}<mark>${matched}</mark>${after}`;
       }
     }
-    
+
     if (index === -1) {
       return message.text;
     }
@@ -99,4 +101,3 @@ export function MessageBubble({
     </div>
   );
 }
-

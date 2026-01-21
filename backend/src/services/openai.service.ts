@@ -21,7 +21,10 @@ export class OpenAIService {
     return TextProcessing.splitTextIntoParagraphs(text);
   }
 
-  splitLongParagraph(text: string, maxLength: number = OPENAI_CONFIG.MAX_SENTENCE_LENGTH): string[] {
+  splitLongParagraph(
+    text: string,
+    maxLength: number = OPENAI_CONFIG.MAX_SENTENCE_LENGTH
+  ): string[] {
     return TextProcessing.splitLongParagraph(text, maxLength);
   }
 
@@ -128,7 +131,7 @@ export class OpenAIService {
             );
 
             content = content.trim() + ' ' + continuation.content.trim();
-          } catch (continuationError) {
+          } catch {
             if (newContinuationCount >= 1) {
               const stopMessage =
                 '\n\n[I stopped here to avoid overwhelming you with too much information. Would you like me to continue?]';
@@ -139,7 +142,9 @@ export class OpenAIService {
       }
 
       if (!TextProcessing.isResponseComplete(content)) {
-        console.warn('Response may still be incomplete (does not end with proper punctuation).');
+        console.warn(
+          'Response may still be incomplete (does not end with proper punctuation).'
+        );
       }
 
       const assistantMessage: ChatMessage = {
@@ -194,7 +199,8 @@ export class OpenAIService {
       throw new Error(ERROR_MESSAGES.TEXT_EMPTY);
     }
 
-    const results: Array<{ audio: Buffer; paragraph: string; index: number }> = [];
+    const results: Array<{ audio: Buffer; paragraph: string; index: number }> =
+      [];
 
     for (let i = 0; i < paragraphs.length; i++) {
       const paragraph = paragraphs[i];
@@ -230,4 +236,3 @@ export class OpenAIService {
     return results.map((r) => r.audio);
   }
 }
-

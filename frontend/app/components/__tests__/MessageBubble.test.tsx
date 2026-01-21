@@ -23,24 +23,14 @@ describe('MessageBubble', () => {
 
   it('should render user message', () => {
     const message = createMessage({ isUser: true, text: 'User message' });
-    render(
-      <MessageBubble
-        message={message}
-        playingSentenceText={null}
-      />
-    );
+    render(<MessageBubble message={message} playingSentenceText={null} />);
 
     expect(screen.getByText('User message')).toBeInTheDocument();
   });
 
   it('should render AI message', () => {
     const message = createMessage({ isUser: false, text: 'AI message' });
-    render(
-      <MessageBubble
-        message={message}
-        playingSentenceText={null}
-      />
-    );
+    render(<MessageBubble message={message} playingSentenceText={null} />);
 
     expect(screen.getByText('AI message')).toBeInTheDocument();
   });
@@ -52,10 +42,7 @@ describe('MessageBubble', () => {
     });
 
     render(
-      <MessageBubble
-        message={message}
-        playingSentenceText="First sentence."
-      />
+      <MessageBubble message={message} playingSentenceText="First sentence." />
     );
 
     // The markdown should contain the highlighted sentence wrapped in <mark>
@@ -68,12 +55,7 @@ describe('MessageBubble', () => {
       text: '**Bold text** and *italic text*',
     });
 
-    render(
-      <MessageBubble
-        message={message}
-        playingSentenceText={null}
-      />
-    );
+    render(<MessageBubble message={message} playingSentenceText={null} />);
 
     expect(screen.getByTestId('markdown')).toBeInTheDocument();
   });
@@ -84,12 +66,7 @@ describe('MessageBubble', () => {
       sentences: ['Test message'],
     });
 
-    render(
-      <MessageBubble
-        message={message}
-        playingSentenceText={null}
-      />
-    );
+    render(<MessageBubble message={message} playingSentenceText={null} />);
 
     const markdown = screen.getByTestId('markdown');
     // Should not contain <mark> tags when nothing is playing
@@ -101,25 +78,16 @@ describe('MessageBubble', () => {
     const aiMessage = createMessage({ isUser: false });
 
     const { container, rerender } = render(
-      <MessageBubble
-        message={userMessage}
-        playingSentenceText={null}
-      />
+      <MessageBubble message={userMessage} playingSentenceText={null} />
     );
 
     // Find the outer div with the className (not the inner prose div)
     const userContainer = container.querySelector('.bg-slate-900');
     expect(userContainer).toBeInTheDocument();
 
-    rerender(
-      <MessageBubble
-        message={aiMessage}
-        playingSentenceText={null}
-      />
-    );
+    rerender(<MessageBubble message={aiMessage} playingSentenceText={null} />);
 
     const aiContainer = container.querySelector('.bg-slate-50');
     expect(aiContainer).toBeInTheDocument();
   });
 });
-

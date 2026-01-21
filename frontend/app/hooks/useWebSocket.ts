@@ -28,14 +28,13 @@ export function useWebSocket(
 ): UseWebSocketReturn {
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(
-    null
-  );
+  const [lastMessage, setLastMessage] = useState<WebSocketMessage | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const shouldAutoReconnectRef = useRef(true);
   const onMessageRef = useRef(onMessageCallback);
-  
+  const connectRef = useRef<(() => void) | null>(null);
+
   useEffect(() => {
     onMessageRef.current = onMessageCallback;
   }, [onMessageCallback]);
@@ -53,13 +52,13 @@ export function useWebSocket(
       ws.onmessage = (event) => {
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
-          
+
           if (onMessageRef.current) {
             onMessageRef.current(message);
           }
-          
+
           setLastMessage(message);
-        } catch (err) {
+        } catch {
           setError('Failed to parse server message');
         }
       };
@@ -71,20 +70,27 @@ export function useWebSocket(
 
       ws.onclose = () => {
         setIsConnected(false);
-        if (shouldAutoReconnectRef.current) {
+        if (shouldAutoReconnectRef.current && connectRef.current) {
           reconnectTimeoutRef.current = setTimeout(() => {
-            connect();
+            connectRef.current?.();
           }, 3000);
         }
       };
-    } catch (err) {
+    } catch {
       setError('Failed to create WebSocket connection');
       setIsConnected(false);
     }
   }, [url]);
 
   useEffect(() => {
-    connect();
+    connectRef.current = connect;
+  }, [connect]);
+
+  useEffect(() => {
+    // Defer connection to avoid setState in effect warning
+    setTimeout(() => {
+      connect();
+    }, 0);
 
     return () => {
       if (reconnectTimeoutRef.current) {
@@ -96,17 +102,14 @@ export function useWebSocket(
     };
   }, [connect]);
 
-  const sendMessage = useCallback(
-    (text: string) => {
-      if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-        wsRef.current.send(JSON.stringify({ text }));
-        setLastMessage(null);
-      } else {
-        setError('WebSocket is not connected');
-      }
-    },
-    []
-  );
+  const sendMessage = useCallback((text: string) => {
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      wsRef.current.send(JSON.stringify({ text }));
+      setLastMessage(null);
+    } else {
+      setError('WebSocket is not connected');
+    }
+  }, []);
 
   const sendStop = useCallback(() => {
     if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
@@ -119,23 +122,22 @@ export function useWebSocket(
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
     }
-    
+
     shouldAutoReconnectRef.current = false;
-    
+
     if (wsRef.current) {
       wsRef.current.close();
       wsRef.current = null;
     }
-    
+
     setLastMessage(null);
     setError(null);
-    
+
     shouldAutoReconnectRef.current = true;
     setTimeout(() => {
-      connect();
+      connectRef.current?.();
     }, 100);
-  }, [connect]);
+  }, []);
 
   return { sendMessage, sendStop, isConnected, error, lastMessage, reconnect };
 }
-

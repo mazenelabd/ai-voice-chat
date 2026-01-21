@@ -15,6 +15,9 @@ interface UseChatMessagesReturn {
 
 export function useChatMessages(): UseChatMessagesReturn {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [currentMessageIndex, setCurrentMessageIndex] = useState<number | null>(
+    null
+  );
   const currentMessageIndexRef = useRef<number | null>(null);
   const isAccumulatingTextRef = useRef(false);
   const currentTextRef = useRef<string>('');
@@ -35,6 +38,7 @@ export function useChatMessages(): UseChatMessagesReturn {
       setMessages((prev) => {
         const newIndex = prev.length;
         currentMessageIndexRef.current = newIndex;
+        setCurrentMessageIndex(newIndex);
         return [
           ...prev,
           {
@@ -67,6 +71,7 @@ export function useChatMessages(): UseChatMessagesReturn {
   const startNewMessage = useCallback(() => {
     isAccumulatingTextRef.current = false;
     currentTextRef.current = '';
+    setCurrentMessageIndex(null);
   }, []);
 
   const addErrorMessage = useCallback((error: string) => {
@@ -87,6 +92,7 @@ export function useChatMessages(): UseChatMessagesReturn {
       setMessages((prev) => {
         const newIndex = prev.length;
         currentMessageIndexRef.current = newIndex;
+        setCurrentMessageIndex(newIndex);
         isAccumulatingTextRef.current = true;
         return [
           ...prev,
@@ -104,13 +110,14 @@ export function useChatMessages(): UseChatMessagesReturn {
   const clearMessages = useCallback(() => {
     setMessages([]);
     currentMessageIndexRef.current = null;
+    setCurrentMessageIndex(null);
     isAccumulatingTextRef.current = false;
     currentTextRef.current = '';
   }, []);
 
   return {
     messages,
-    currentMessageIndex: currentMessageIndexRef.current,
+    currentMessageIndex,
     addUserMessage,
     updateAIMessage,
     startNewMessage,
@@ -119,4 +126,3 @@ export function useChatMessages(): UseChatMessagesReturn {
     ensureAIMessageDisplayed,
   };
 }
-

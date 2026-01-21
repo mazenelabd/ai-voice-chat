@@ -63,15 +63,19 @@ describe('MessageList', () => {
   it('should show loading indicator when loading', () => {
     render(<MessageList {...defaultProps} isLoading={true} />);
     // Loading dots should be present
-    const loadingDots = screen.getAllByRole('generic').filter((el) =>
-      el.className.includes('animate-pulse')
-    );
+    const loadingDots = screen
+      .getAllByRole('generic')
+      .filter((el) => el.className.includes('animate-pulse'));
     expect(loadingDots.length).toBeGreaterThan(0);
   });
 
   it('should pass playingSentenceText to current message', () => {
     const messages = [
-      createMessage({ isUser: false, text: 'AI message', sentences: ['AI message'] }),
+      createMessage({
+        isUser: false,
+        text: 'AI message',
+        sentences: ['AI message'],
+      }),
     ];
     render(
       <MessageList
@@ -87,16 +91,19 @@ describe('MessageList', () => {
 
   it('should align user messages to the right', () => {
     const messages = [createMessage({ isUser: true, text: 'User message' })];
-    const { container } = render(<MessageList {...defaultProps} messages={messages} />);
+    const { container } = render(
+      <MessageList {...defaultProps} messages={messages} />
+    );
     const messageContainer = container.querySelector('.flex.justify-end');
     expect(messageContainer).toBeInTheDocument();
   });
 
   it('should align AI messages to the left', () => {
     const messages = [createMessage({ isUser: false, text: 'AI message' })];
-    const { container } = render(<MessageList {...defaultProps} messages={messages} />);
+    const { container } = render(
+      <MessageList {...defaultProps} messages={messages} />
+    );
     const messageContainer = container.querySelector('.flex.justify-start');
     expect(messageContainer).toBeInTheDocument();
   });
 });
-
