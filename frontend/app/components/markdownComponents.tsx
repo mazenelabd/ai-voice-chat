@@ -10,7 +10,11 @@ export const markdownComponents: Partial<Components> = {
       {children}
     </p>
   ),
-  code: ({ children, className, ...props }: ComponentPropsWithoutRef<'code'>) => {
+  code: ({
+    children,
+    className,
+    ...props
+  }: ComponentPropsWithoutRef<'code'>) => {
     const isInline = !className;
     return isInline ? (
       <code
@@ -58,7 +62,10 @@ export const markdownComponents: Partial<Components> = {
       {children}
     </em>
   ),
-  blockquote: ({ children, ...props }: ComponentPropsWithoutRef<'blockquote'>) => (
+  blockquote: ({
+    children,
+    ...props
+  }: ComponentPropsWithoutRef<'blockquote'>) => (
     <blockquote
       className="border-l-4 border-slate-300 dark:border-slate-600 pl-4 my-2 italic"
       {...props}
