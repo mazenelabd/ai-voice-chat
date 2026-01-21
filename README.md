@@ -80,14 +80,14 @@ text-audio-chat-app/
 
 ## Features
 
-- ✅ Real-time WebSocket communication
-- ✅ OpenAI GPT-4o-mini integration
-- ✅ Text-to-speech conversion
-- ✅ Markdown rendering for AI responses
-- ✅ Sentence highlighting during audio playback
-- ✅ Stop generation and audio playback
-- ✅ Responsive design with dark mode
-- ✅ Comprehensive test coverage
+- Real-time WebSocket communication
+- OpenAI GPT-4o-mini integration
+- Text-to-speech conversion
+- Markdown rendering for AI responses
+- Sentence highlighting during audio playback
+- Stop generation and audio playback
+- Responsive design with dark mode
+- Comprehensive test coverage
 
 ## Technology Stack
 
