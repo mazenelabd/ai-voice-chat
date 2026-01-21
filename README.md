@@ -102,15 +102,15 @@ text-audio-chat-app/
 
 ## Environment Variables
 
-### Backend (optional)
+### Backend
 ```bash
-PORT=8000
-OPENAI_API_KEY=your_key_here
+PORT=8000                    # Optional (defaults to 8000)
+OPENAI_API_KEY=your_key_here # Required
 ```
 
-### Frontend (optional)
+### Frontend
 ```bash
-NEXT_PUBLIC_WS_URL=ws://localhost:8000
+NEXT_PUBLIC_WS_URL=ws://localhost:8000  # Optional (defaults to ws://localhost:8000)
 ```
 
 ## License
